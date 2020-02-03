@@ -1,1 +1,3 @@
-# word-frequency
+Fiona Yonkman
+
+Word frequency counter web app
