@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	
+	<link rel="stylesheet" type="text/css" href="static/style.css" />
+
+</head>
+
+<body>
+	
+	<div>
+	 <label for="input-file">Specify a file:</label><br>
+	 <input type="file" id="input-file">
+	 <script src="static/script.js"></script>
+	</div>
+
+	<form action="/" method="POST">
+	 <textarea name="originalText" id="content-target"></textarea><br>
+	 <input type="checkbox" name="stopwords" id="stopwords" checked>Stop words<br>
+	 <input type="hidden" id="filename" name="filename" value="">
+	 <input type="submit" name="filetext" value="Count!">
+	</form>
+
+	<div class="content">
+    <h1>Queries</h1>
+    {% if tasks|length < 1 %}
+    <h4>There are no queries.</h4>
+    {% else %}
+    <table>
+        <tr>
+            <th>Filename</th>
+            <th>Added</th>
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.filename }}</td>
+                <td>{{ task.date_created.date() }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+</body>
+
+</html>
