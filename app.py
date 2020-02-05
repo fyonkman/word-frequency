@@ -34,7 +34,6 @@ def index():
 
 @app.route('/clear_history')
 def clear_history():
-	print('cleared')
 	db.session.query(Queries).delete()
 	db.session.commit()
 	return redirect('/')

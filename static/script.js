@@ -19,7 +19,7 @@ function placeFileContent(target, file) {
 }
 
 function getFileName(target, filename){
-  target.value = filename.split(/(\\|\/)/g).pop().split('.')[0]
+  target.value = filename.split(/(\\|\/)/g).pop().split('.')[0];
 }
 
 function readFileContent(file) {
