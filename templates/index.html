@@ -25,7 +25,7 @@
 
 	<div class="content">
     <h1>Queries</h1>
-    {% if tasks|length < 1 %}
+    {% if queries|length < 1 %}
     <h4>There are no queries.</h4>
     {% else %}
     <table>
@@ -33,14 +33,18 @@
             <th>Filename</th>
             <th>Added</th>
         </tr>
-        {% for task in tasks %}
+        {% for query in queries %}
             <tr>
-                <td>{{ task.filename }}</td>
-                <td>{{ task.date_created.date() }}</td>
+                <td>{{ query.filename }}</td>
+                <td>{{ query.date_created.date() }}</td>
             </tr>
         {% endfor %}
     </table>
     {% endif %}
+
+    <form action="/clear_history">
+	 <input type="submit" name="clear_history" value="Clear History">
+	</form>
 
 </body>
 

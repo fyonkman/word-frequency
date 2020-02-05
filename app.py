@@ -13,29 +13,31 @@ class Queries(db.Model):
 	word_frequencies = db.Column(db.Text)
 	date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-	def __repr__(self):
-		return '<File %r>' % self.filename
-
 @app.route('/', methods=['POST', 'GET'])
 def index():
 	if request.method == 'POST':
 		text = request.form['originalText']
 		filename = request.form['filename']
 		stopwords = request.form.get('stopwords')
-		new_task = Queries(filename=filename, originalText=text)
-		return redirect('/')
+		new_query = Queries(filename=filename, originalText=text)
 
-		# try:
-		# 	db.session.add(new_task)
-		# 	db.session.commit()
-		# 	return redirect('/')
-		# except:
-		# 	print(request.form['filename'])
-		# 	return 'There was an issue adding your task'
+		try:
+			db.session.add(new_query)
+			db.session.commit()
+			return redirect('/')
+		except:
+			return 'There was an issue with your query'
 
 	else:
-		tasks = Queries.query.order_by(Queries.date_created).all()
-		return render_template('index.html', tasks=tasks)
+		queries = Queries.query.order_by(Queries.date_created).all()
+		return render_template('index.html', queries=queries)
+
+@app.route('/clear_history')
+def clear_history():
+	print('cleared')
+	db.session.query(Queries).delete()
+	db.session.commit()
+	return redirect('/')
 
 if __name__ == "__main__":
 	app.run(debug=True)
