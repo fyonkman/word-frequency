@@ -22,7 +22,8 @@ def countWords(text):
 def stem(word):
     stemmed = word
     for suffix in SUFFIXES:
-        if word.endswith(suffix):
+        #is this hacky?
+        if word.endswith(suffix) and not word[:-len(suffix)].endswith(suffix):
             stemmed = word[:-len(suffix)]
         while stemmed.endswith('i') or stemmed.endswith('e'):
             if stemmed.endswith('i'): stemmed = stemmed[:-1]+'y'

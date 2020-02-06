@@ -20,7 +20,7 @@ def index():
 		filename = request.form['filename']
 		stopwords = request.form.get('stopwords')
 
-		
+
 		new_query = Queries(filename=filename, originalText=text)
 
 		try:
