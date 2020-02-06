@@ -20,7 +20,7 @@ def countWords(text):
     return dict
 
 def stem(word):
-    stemmed = ""
+    stemmed = word
     for suffix in SUFFIXES:
         if word.endswith(suffix):
             stemmed = word[:-len(suffix)]
@@ -28,9 +28,3 @@ def stem(word):
             if stemmed.endswith('i'): stemmed = stemmed[:-1]+'y'
             else: stemmed = stemmed[:-1]
     return stemmed
-
-
-words=["passes", "passing", "passed"]
-morewords=["copies", "copying", "copied"]
-for word in morewords:
-    print(stem(word)+'\n')
