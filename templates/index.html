@@ -46,6 +46,27 @@
 	 <input type="submit" name="clear_history" value="Clear History">
 	</form>
 
+  {% if queries|length < 1 %}
+  <h4>There are no queries.</h4>
+  {% else %}
+  <table>
+    <tr>
+      <th>Order</th>
+      <th>Word</th>
+      <th>Frequency</th>
+    </tr>
+    {% for k, v in queries[queries|length - 1].word_frequencies.items() %}
+      <tr>
+        <td> {{ loop.index }} </td>
+        <td> {{ k }} </td>
+        <td> {{ v }} </td>
+      </tr>
+    {% endfor %}
+
+
+  </table>
+  {% endif %}
+
 </body>
 
 </html>

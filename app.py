@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import model
+import pickle
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///previousfiles.db'
@@ -10,8 +12,9 @@ class Queries(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	filename = db.Column(db.Text, nullable=False)
 	originalText = db.Column(db.Text)
-	word_frequencies = db.Column(db.Text)
+	word_frequencies = db.Column(db.PickleType)
 	date_created = db.Column(db.DateTime, default=datetime.utcnow)
+	stopwords = db.Column(db.Boolean)
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -19,9 +22,14 @@ def index():
 		text = request.form['originalText']
 		filename = request.form['filename']
 		stopwords = request.form.get('stopwords')
+		if stopwords:
+			stopwords = True
+		else:
+			stopwords = False
+		frequency_dict = model.countWords(text, stopwords)
 
-
-		new_query = Queries(filename=filename, originalText=text)
+		new_query = Queries(filename=filename, originalText=text,
+						stopwords=stopwords, word_frequencies=frequency_dict)
 
 		try:
 			db.session.add(new_query)
