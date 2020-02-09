@@ -19,28 +19,35 @@ class Queries(db.Model):
 @app.route('/', methods=['POST', 'GET'])
 def index():
 	if request.method == 'POST':
-		text = request.form['originalText']
-		filename = request.form['filename']
-		stopwords = request.form.get('stopwords')
-		if stopwords:
-			stopwords = True
+		if 'originalText' in request.form:
+			text = request.form['originalText']
+			filename = request.form['filename']
+			stopwords = request.form.get('stopwords')
+			if stopwords:
+				stopwords = True
+			else:
+				stopwords = False
+			frequency_dict = model.countWords(text, stopwords)
+
+			new_query = Queries(filename=filename, originalText=text,
+							stopwords=stopwords, word_frequencies=frequency_dict)
+
+			try:
+				db.session.add(new_query)
+				db.session.commit()
+				return redirect('/')
+			except:
+				return 'There was an issue with your query'
+		elif 'view' in request.form:
+			current=int(request.form['current'])
+			queries = Queries.query.order_by(Queries.date_created).all()
+			return render_template('index.html', queries=queries, current=current)
 		else:
-			stopwords = False
-		frequency_dict = model.countWords(text, stopwords)
-
-		new_query = Queries(filename=filename, originalText=text,
-						stopwords=stopwords, word_frequencies=frequency_dict)
-
-		try:
-			db.session.add(new_query)
-			db.session.commit()
 			return redirect('/')
-		except:
-			return 'There was an issue with your query'
 
 	else:
 		queries = Queries.query.order_by(Queries.date_created).all()
-		return render_template('index.html', queries=queries)
+		return render_template('index.html', queries=queries, current=None)
 
 @app.route('/clear_history')
 def clear_history():

@@ -5,31 +5,31 @@ class modelUnitTests(unittest.TestCase):
 
     #tests that countWords creates a dictionary for a string of a single word
     def test_countWords_singleWord(self):
-        self.assertEqual(model.countWords('hello'), {'hello': 1})
+        self.assertEqual(model.countWords('talk', None), {'talk': 1})
 
     #tests countWords correctly removes punctuation from strings
     def test_countWords_punctuationRemoval(self):
-        self.assertEqual(model.countWords('!hello!'), {'hello': 1})
+        self.assertEqual(model.countWords('!talk!', None), {'talk': 1})
 
     #tests countWords removes all punctuation except apostrophes
     def test_countWords_apostrophe(self):
-        self.assertEqual(model.countWords("!it's@"), {"it's": 1})
+        self.assertEqual(model.countWords("!we'll@", None), {"we'll": 1})
 
     #tests countWords correctly creates dictionary for multiple words
     def test_countWords_multipleWords(self):
-        self.assertEqual(model.countWords('hello hello hello hi'),
-                                            {'hello': 3, 'hi': 1})
+        self.assertEqual(model.countWords('hello hello hello talk', None),
+                                            {'hello': 3, 'talk': 1})
 
     #tests countWords correctly creates dictionary for same word with
     #different capitalizations
     def test_countWords_multipleDiffCapitalization(self):
-        self.assertEqual(model.countWords('hello Hello Hello'),
+        self.assertEqual(model.countWords('hello Hello Hello', None),
                                             {'hello': 3})
 
-    #tests countWords orders dictionary by frequency in descending order                                    
+    #tests countWords orders dictionary by frequency in descending order
     def test_countWords_descendingOrder(self):
-        self.assertEqual(model.countWords('hi hi hello hello hello'),
-                                            {'hello': 3, 'hi': 2})
+        self.assertEqual(model.countWords('talk talk hello hello hello', None),
+                                            {'hello': 3, 'talk': 2})
 
     #the following unit tests test the STEM function for the
     #provided conjugated verb forms (talk, play, pass, and copy)

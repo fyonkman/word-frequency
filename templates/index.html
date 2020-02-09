@@ -11,10 +11,33 @@
 <body>
 
 	<div>
-	 <label for="input-file">Specify a file:</label><br>
-	 <input type="file" id="input-file">
-	 <script src="static/script.js"></script>
+	    <label for="input-file">Specify a file:</label><br>
+	    <input type="file" id="input-file">
+	    <script src="static/script.js"></script>
 	</div>
+
+  <div class="wordtable">
+      {% if queries|length < 1 %}
+      <h4>There are no queries.</h4>
+      {% else %}
+      <table>
+        <tr>
+          <th>Order</th>
+          <th>Word</th>
+          <th>Frequency</th>
+        </tr>
+        {% for k, v in queries[queries|length - 1].word_frequencies.items() %}
+        <tr>
+          <td> {{ loop.index }} </td>
+          <td> {{ k }} </td>
+          <td> {{ v }} </td>
+        </tr>
+        {% endfor %}
+
+
+      </table>
+      {% endif %}
+  </div>
 
 	<form action="/" method="POST">
 	 <textarea name="originalText" id="content-target"></textarea><br>
@@ -22,6 +45,25 @@
 	 <input type="hidden" id="filename" name="filename" value="">
 	 <input type="submit" name="filetext" value="Count!">
 	</form>
+
+  <div class="wordtable">
+    {% if current %}
+      <table>
+        <tr>
+          <th>Order</th>
+          <th>Word</th>
+          <th>Frequency</th>
+        </tr>
+        {% for k, v in queries[current].word_frequencies.items() %}
+        <tr>
+          <td> {{ loop.index }} </td>
+          <td> {{ k }} </td>
+          <td> {{ v }} </td>
+        </tr>
+        {% endfor %}
+      </table>
+    {% endif %}
+  </div>
 
 	<div class="content">
     <h1>Queries</h1>
@@ -32,11 +74,18 @@
         <tr>
             <th>Filename</th>
             <th>Added</th>
+            <th>Access</th>
         </tr>
         {% for query in queries %}
             <tr>
                 <td>{{ query.filename }}</td>
                 <td>{{ query.date_created.date() }}</td>
+                <td>
+                  <form action="/" method="POST">
+                    <input type="hidden" name = "current" value="{{ loop.index0 }}">
+                    <input type="submit" name="view" value="View">
+                  </form>
+                </td>
             </tr>
         {% endfor %}
     </table>
@@ -45,27 +94,6 @@
   <form action="/clear_history">
 	 <input type="submit" name="clear_history" value="Clear History">
 	</form>
-
-  {% if queries|length < 1 %}
-  <h4>There are no queries.</h4>
-  {% else %}
-  <table>
-    <tr>
-      <th>Order</th>
-      <th>Word</th>
-      <th>Frequency</th>
-    </tr>
-    {% for k, v in queries[queries|length - 1].word_frequencies.items() %}
-      <tr>
-        <td> {{ loop.index }} </td>
-        <td> {{ k }} </td>
-        <td> {{ v }} </td>
-      </tr>
-    {% endfor %}
-
-
-  </table>
-  {% endif %}
 
 </body>
 

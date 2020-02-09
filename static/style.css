@@ -4,6 +4,11 @@ label {
 }
 
 textarea {
-  width: 400px;
+  width: 300px;
   height: 150px;
+}
+
+.wordtable {
+  width: 52%;
+  float: right;
 }
