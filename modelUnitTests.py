@@ -1,3 +1,6 @@
+##Fiona Yonkman 2020
+##Python file of unit tests that tests function in model.py
+
 import unittest
 import model
 

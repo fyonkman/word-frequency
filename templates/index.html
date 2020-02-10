@@ -1,8 +1,17 @@
+<! Fiona Yonkman 2020>
 <!DOCTYPE html>
+<!-- html file that handles the view of the webpage-->
+<!-- languages used include html and jinja, css and javascript files called-->
 
 <html>
 
 <head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" type="text/css" href="static/style.css" />
 
@@ -10,19 +19,37 @@
 
 <body>
 
-	<div>
-	    <label for="input-file">Specify a file:</label><br>
+  <!-- button for uploading a file -->
+<div id="wrapper">
+	<div id="first">
+	    <h4>Specify a file:</h4>
 	    <input type="file" id="input-file">
 	    <script src="static/script.js"></script>
-	</div>
 
-  <div class="wordtable">
+  <!-- textbox for entered text, stopwords checkbox, Count submit button -->
+  <form action="/" method="POST">
+   <textarea name="original_text" id="content-target"></textarea><br>
+   <input type="checkbox" name="stopwords" id="stopwords" checked>Remove stop words<br>
+   <input type="hidden" id="filename" name="filename" value="">
+   <input type="submit" name="filetext" value="Count!">
+  </form>
+  </div>
+
+  <!-- word frequency table for current query -->
+  <div class="wordtable" id="second">
+    <h2>Most recent query</h2>
       {% if queries|length < 1 %}
       <h4>There are no queries.</h4>
       {% else %}
+      {% if queries[queries|length - 1].stopwords %}
+      <h4>Stopwords: Removed</h4>
+      {% else %}
+      <h4>Stopwords: Allowed</h4>
+      {% endif %}
+
       <table>
         <tr>
-          <th>Order</th>
+          <th>Order </th>
           <th>Word</th>
           <th>Frequency</th>
         </tr>
@@ -38,19 +65,65 @@
       </table>
       {% endif %}
   </div>
+  <div class="container" id="third">
+  {% if queries|length > 0 %}
+  <h4>Original Text</h4>
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#recentogtext">Toggle text</button>
+  <div id="recentogtext" class="collapse in">
+    {{queries[queries|length - 1].original_text}}
+  </div>
+  {% endif %}
+</div>
+</div>
 
-	<form action="/" method="POST">
-	 <textarea name="originalText" id="content-target"></textarea><br>
-	 <input type="checkbox" name="stopwords" id="stopwords" checked>Stop words<br>
-	 <input type="hidden" id="filename" name="filename" value="">
-	 <input type="submit" name="filetext" value="Count!">
-	</form>
+<!-- table of database of previous queries -->
+<div id="wrapper2">
+<div class="content" id="fourth">
+  <h1>Queries</h1>
+  {% if queries|length < 1 %}
+  <h4>There are no queries.</h4>
+  {% else %}
+  <table>
+      <tr>
+          <th>Query #</th>
+          <th>Filename </th>
+          <th>Added</th>
+          <th>Access</th>
+      </tr>
+      {% for query in queries %}
+          <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ query.filename }}</td>
+              <td>{{ query.date_created.date() }}</td>
+              <td>
+                <form action="/" method="POST">
+                  <input type="hidden" name = "current" value="{{ loop.index0 }}">
+                  <input type="submit" name="view" value="View">
+                </form>
+              </td>
+          </tr>
+      {% endfor %}
+  </table>
+  {% endif %}
 
-  <div class="wordtable">
-    {% if current %}
+<!-- clear database history button -->
+<form action="/clear_history">
+ <input type="submit" name="clear_history" value="Clear History">
+</form>
+</div>
+
+  <!-- word frequency table for requested previous query -->
+  <div class="wordtable" id="fifth">
+    {% if current or current==0 %}
+    <h2>Query # {{current+1}}</h2>
+    {% if queries[current].stopwords %}
+    <h4>Stopwords: Removed</h4>
+    {% else %}
+    <h4>Stopwords: Allowed</h4>
+    {% endif %}
       <table>
         <tr>
-          <th>Order</th>
+          <th>Order </th>
           <th>Word</th>
           <th>Frequency</th>
         </tr>
@@ -65,35 +138,16 @@
     {% endif %}
   </div>
 
-	<div class="content">
-    <h1>Queries</h1>
-    {% if queries|length < 1 %}
-    <h4>There are no queries.</h4>
-    {% else %}
-    <table>
-        <tr>
-            <th>Filename</th>
-            <th>Added</th>
-            <th>Access</th>
-        </tr>
-        {% for query in queries %}
-            <tr>
-                <td>{{ query.filename }}</td>
-                <td>{{ query.date_created.date() }}</td>
-                <td>
-                  <form action="/" method="POST">
-                    <input type="hidden" name = "current" value="{{ loop.index0 }}">
-                    <input type="submit" name="view" value="View">
-                  </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-
-  <form action="/clear_history">
-	 <input type="submit" name="clear_history" value="Clear History">
-	</form>
+  <div class="container" id="sixth">
+  {% if current or current==0 %}
+  <h4>Original Text</h4>
+  <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#viewogtext">Toggle text</button>
+  <div id="viewogtext" class="collapse in">
+    {{queries[current].original_text}}
+  </div>
+  {% endif %}
+</div>
+</div>
 
 </body>
 

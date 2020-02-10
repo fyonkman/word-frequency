@@ -1,14 +1,63 @@
+/* Fiona Yonkman 2020
+   css file for view's style */
+
 label {
   display: block;
   font: 1rem 'Fira Sans', sans-serif;
 }
 
 textarea {
-  width: 300px;
-  height: 150px;
+  width: 200px;
+  height: 100px;
 }
 
-.wordtable {
-  width: 52%;
-  float: right;
+table, th, td {
+  border: 1px solid black;
+}
+
+#wrapper {
+  width:100%;
+  position: absolute;
+  clear: both;
+}
+#first {
+  width:33%;
+  float: left;
+}
+#second {
+  width: 33%;
+  float: left;
+  height: 300px;
+  overflow: auto;
+}
+#third {
+  width: 33%;
+  float: left;
+  height: 300px;
+  overflow: auto;
+}
+
+#wrapper2 {
+  position: relative;
+  top: 330px;
+  width: 100%;
+  clear: both;
+}
+
+#fourth {
+  width: 33%;
+  float: left;
+}
+
+#fifth {
+  width: 33%;
+  float: left;
+  height: 300px;
+  overflow: auto;
+}
+#sixth {
+  width: 33%;
+  float: left;
+  height: 300px;
+  overflow: auto;
 }
